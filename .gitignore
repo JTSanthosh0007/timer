@@ -1,0 +1,24 @@
+*.iml
+.gradle
+/local.properties
+/.idea/
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Android Studio / IntelliJ
+.idea
+*.iws
+*.iml
+*.ipr
+
+# Gradle
+.gradle/
+build/
+
+# MindControl specific
+gradle-dist/
+app/build/

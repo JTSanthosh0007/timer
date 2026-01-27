@@ -48,8 +48,12 @@ class MainActivity : AppCompatActivity() {
     private val handler = android.os.Handler(android.os.Looper.getMainLooper())
     private val updateRunnable = object : Runnable {
         override fun run() {
-            if (Utils.isLocked(this@MainActivity)) {
-                 updateUIState()
+            // Check state and update UI
+            val locked = Utils.isLocked(this@MainActivity)
+            updateUIState()
+            
+            // Continue loop only if still locked
+            if (locked) {
                  handler.postDelayed(this, 1000)
             }
         }
