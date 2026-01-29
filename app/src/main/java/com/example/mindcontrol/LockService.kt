@@ -40,14 +40,13 @@ class LockService : AccessibilityService() {
                 if (packageName == this.packageName || 
                     packageName == "com.android.systemui" || 
                     packageName == launcherPackage ||
-                    allowedApps.contains(packageName)
+                    allowedApps.contains(packageName) ||
+                    isInputMethod(packageName)
                 ) {
                     return
                 }
 
                 // Block!
-                // We use GLOBAL_ACTION_HOME because it's the standard way to background an app.
-                // Since we now allow the launcher, this won't loop.
                 performGlobalAction(GLOBAL_ACTION_HOME)
                 
                 // Immediately bring our app to front to discourage usage
@@ -56,6 +55,21 @@ class LockService : AccessibilityService() {
                  startActivity(intent)
             }
         }
+    }
+
+    private fun isInputMethod(packageName: String): Boolean {
+        try {
+            val imm = getSystemService(android.content.Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+            val inputMethods = imm.enabledInputMethodList
+            for (method in inputMethods) {
+                if (method.packageName == packageName) {
+                    return true
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
     }
 
     override fun onInterrupt() {

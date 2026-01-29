@@ -1,0 +1,42 @@
+> Task :app:clean FAILED
+
+[Incubating] Problems report is available at: file:///C:/Users/jtsan/Desktop/mindcontrol/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:clean'.
+> java.io.IOException: Unable to delete directory 'C:\Users\jtsan\Desktop\mindcontrol\app\build'
+    Failed to delete some children. This might happen because a process has files open or has its working directory set in the target directory.
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\generated\res\pngs\debug
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\generated\res\pngs
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\generated\res\resValues\debug
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\generated\res\resValues
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\generated\res
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\generated
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\aar_metadata_check\debug
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\aar_metadata_check
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\annotation_processor_list\debug
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\annotation_processor_list
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\apk_ide_redirect_file\debug
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\apk_ide_redirect_file
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\app_metadata\debug
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\app_metadata
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\assets\debug
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\assets
+    - and more ...
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 7s
+1 actionable task: 1 executed

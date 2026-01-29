@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">MindControl</string>
+    <string name="app_name">Focentra</string>
     <string name="accessibility_service_description">This service is required to block distracting apps during your focus sessions.</string>
     <string name="select_apps">Select 4 Apps (Phone is default)</string>
     <string name="start_timer">Start Focus Timer</string>

@@ -59,8 +59,17 @@ class TimerService : Service() {
 
     private fun finishTimer() {
         Utils.unlock(this)
+        
+        // Broadcast for any other listeners
         val intent = Intent(Utils.ACTION_TIMER_FINISHED)
         sendBroadcast(intent)
+        
+        // Launch Activity to show Ended Screen and Play Alarm
+        val activityIntent = Intent(this, MainActivity::class.java)
+        activityIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        activityIntent.putExtra("show_ended_screen", true)
+        startActivity(activityIntent)
+        
         stopForeground(true)
         stopSelf()
     }

@@ -1,0 +1,27 @@
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':app:mergeDebugResources'.
+> java.io.IOException: Unable to delete directory 'C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\merged_res_blame_folder\debug\out'
+    Failed to delete some children. This might happen because a process has files open or has its working directory set in the target directory.
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\merged_res_blame_folder\debug\out\multi-v2
+    - C:\Users\jtsan\Desktop\mindcontrol\app\build\intermediates\merged_res_blame_folder\debug\out\single
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 4s
+5 actionable tasks: 2 executed, 3 up-to-date

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    
+    <!-- Phone body -->
+    <path
+        android:pathData="M7,2h10a2,2 0,0 1,2 2v16a2,2 0,0 1,-2 2H7a2,2 0,0 1,-2 -2V4a2,2 0,0 1,2 -2z"
+        android:fillColor="#4A4A4A"
+        android:strokeWidth="0"/>
+    
+    <!-- Screen -->
+    <path
+        android:pathData="M6,4h12v14H6z"
+        android:fillColor="#2A2A2A"
+        android:strokeWidth="0"/>
+    
+    <!-- Block icon circle -->
+    <path
+        android:pathData="M12,8m-4,0a4,4 0,1 1,8 0a4,4 0,1 1,-8 0"
+        android:fillColor="#FFFFFF"
+        android:strokeWidth="0"/>
+    
+    <!-- Block line -->
+    <path
+        android:pathData="M9.17,5.17L14.83,10.83"
+        android:strokeColor="#FF5722"
+        android:strokeWidth="1.5"
+        android:strokeLineCap="round"/>
+
+    <!-- Home button -->
+    <path
+        android:pathData="M12,20m-0.8,0a0.8,0.8 0,1 1,1.6 0a0.8,0.8 0,1 1,-1.6 0"
+        android:fillColor="#666666"
+        android:strokeWidth="0"/>
+    
+</vector>

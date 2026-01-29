@@ -73,10 +73,73 @@ object Utils {
             .apply()
     }
 
+    private const val KEY_TOTAL_HISTORY = "history_total_time"
+
+    fun addToTotalHistory(context: Context, durationMillis: Long) {
+        val current = getTotalHistory(context)
+        getPrefs(context).edit().putLong(KEY_TOTAL_HISTORY, current + durationMillis).apply()
+    }
+
+    fun getTotalHistory(context: Context): Long {
+        return getPrefs(context).getLong(KEY_TOTAL_HISTORY, 0)
+    }
+
+    fun formatHistoryTime(millis: Long): String {
+        val hours = millis / (1000 * 60 * 60)
+        val minutes = (millis / (1000 * 60)) % 60
+        return "${hours}h ${minutes}m"
+    }
+
     fun formatTime(millis: Long): String {
         val seconds = (millis / 1000) % 60
         val minutes = (millis / (1000 * 60)) % 60
         val hours = (millis / (1000 * 60 * 60))
         return String.format("%02d:%02d:%02d", hours, minutes, seconds)
+    }
+
+    // ===== Onboarding & Usage Tracking =====
+    
+    private const val KEY_ONBOARDING_COMPLETED = "onboarding_completed"
+    private const val KEY_ESTIMATED_USAGE = "estimated_usage_minutes"
+    private const val KEY_ACTUAL_USAGE = "actual_usage_minutes"
+    
+    fun isOnboardingCompleted(context: Context): Boolean {
+        return getPrefs(context).getBoolean(KEY_ONBOARDING_COMPLETED, false)
+    }
+    
+    fun setOnboardingCompleted(context: Context, completed: Boolean) {
+        getPrefs(context).edit().putBoolean(KEY_ONBOARDING_COMPLETED, completed).apply()
+    }
+    
+    fun setEstimatedUsage(context: Context, minutes: Int) {
+        getPrefs(context).edit().putInt(KEY_ESTIMATED_USAGE, minutes).apply()
+    }
+    
+    fun getEstimatedUsage(context: Context): Int {
+        return getPrefs(context).getInt(KEY_ESTIMATED_USAGE, 0)
+    }
+    
+    fun setActualUsage(context: Context, minutes: Int) {
+        getPrefs(context).edit().putInt(KEY_ACTUAL_USAGE, minutes).apply()
+    }
+    
+    fun getActualUsage(context: Context): Int {
+        return getPrefs(context).getInt(KEY_ACTUAL_USAGE, 0)
+    }
+    
+    fun getTimeSavedToday(context: Context): Long {
+        // Calculate time saved based on focus sessions completed today
+        // This is a simplified version - you could make it more sophisticated
+        return getTotalHistory(context)
+    }
+    
+    fun formatMinutesToReadable(minutes: Int): String {
+        return if (minutes < 60) {
+            "${minutes}m"
+        } else {
+            val hours = minutes / 60
+            val mins = minutes % 60
+            if (mins > 0) "${hours}h ${mins}m" else "${hours}h"
+        }
     }
 }

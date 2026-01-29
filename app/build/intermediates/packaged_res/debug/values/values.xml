@@ -1,16 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="background_color">#121212</color>
+    <color name="background_color">#000000</color>
     <color name="black">#FF000000</color>
     <color name="error_color">#CF6679</color>
-    <color name="primary_color">#BB86FC</color>
+    <color name="gray_dark">#1C1C1E</color>
+    <color name="gray_medium">#2C2C2E</color>
+    <color name="gray_text">#8E8E93</color>
+    <color name="orange_accent">#FF5722</color>
+    <color name="orange_dark">#E64A19</color>
+    <color name="primary_color">#FF4500</color>
+    <color name="primary_variant">#D84315</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
-    <color name="surface_color">#1E1E1E</color>
+    <color name="segment_bg">#2C2C2E</color>
+    <color name="segment_selected">#636366</color>
+    <color name="surface_color">#1C1C1E</color>
     <color name="teal_200">#FF03DAC5</color>
+    <color name="text_primary">#FFFFFF</color>
+    <color name="text_secondary">#8E8E93</color>
     <color name="white">#FFFFFFFF</color>
     <string name="accessibility_service_description">This service is required to block distracting apps during your focus sessions.</string>
-    <string name="app_name">MindControl</string>
+    <string name="app_name">Focentra</string>
     <string name="apps_remaining">Apps to select: %d</string>
     <string name="permission_required">Please enable Accessibility Service for MindControl to function.</string>
     <string name="select_apps">Select 4 Apps (Phone is default)</string>
@@ -30,7 +40,8 @@
         
         <item name="android:windowBackground">@color/background_color</item>
         
-        <item name="colorControlNormal">@color/white</item>
+        <item name="colorControlNormal">@android:color/transparent</item>
         <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:editTextColor">@color/white</item>
     </style>
 </resources>

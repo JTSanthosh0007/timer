@@ -1,10 +1,10 @@
 {
     "logs": [
         {
-            "outputFile": "com.example.mindcontrol.app-mergeDebugResources-33:/values-h720dp-v13/values-h720dp-v13.xml",
+            "outputFile": "com.example.mindcontrol.app-mergeDebugResources-41:/values-h720dp-v13/values-h720dp-v13.xml",
             "map": [
                 {
-                    "source": "C:\\Users\\jtsan\\.gradle\\caches\\transforms-3\\d219056562254d5f48577226afcb14b6\\transformed\\appcompat-1.6.1\\res\\values-h720dp-v13\\values-h720dp-v13.xml",
+                    "source": "C:\\Users\\jtsan\\.gradle\\caches\\8.13\\transforms\\8f9c50f5161f1f3b1e9a9e332c9a432e\\transformed\\appcompat-1.6.1\\res\\values-h720dp-v13\\values-h720dp-v13.xml",
                     "from": {
                         "startLines": "2",
                         "startColumns": "4",

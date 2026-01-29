@@ -13,8 +13,9 @@
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/background_color</item>
-        <!-- Ensure NumberPicker text is visible (white) -->
-        <item name="colorControlNormal">@color/white</item>
+        <!-- Ensure NumberPicker text is visible (white) and remove divider -->
+        <item name="colorControlNormal">@android:color/transparent</item>
         <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:editTextColor">@color/white</item>
     </style>
 </resources>
