@@ -15,6 +15,7 @@ class AllowedAppAdapter(
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val icon: ImageView = view.findViewById(R.id.ivIcon)
+        val name: TextView = view.findViewById(R.id.tvAppName)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,6 +27,7 @@ class AllowedAppAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val app = apps[position]
         holder.icon.setImageDrawable(app.icon)
+        holder.name.text = app.label
         
         holder.itemView.setOnClickListener {
             onItemClick(app)

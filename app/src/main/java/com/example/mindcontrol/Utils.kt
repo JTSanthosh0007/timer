@@ -11,6 +11,7 @@ object Utils {
     private const val KEY_ALLOWED_APPS = "allowed_apps"
     private const val KEY_TIMER_END_TIME = "timer_end_time"
     private const val KEY_IS_LOCKED = "is_locked"
+    private const val KEY_SESSION_HISTORY = "session_history"
     
     // Broadcast Actions
     const val ACTION_TIMER_TICK = "com.example.mindcontrol.TIMER_TICK"
@@ -82,6 +83,27 @@ object Utils {
 
     fun getTotalHistory(context: Context): Long {
         return getPrefs(context).getLong(KEY_TOTAL_HISTORY, 0)
+    }
+
+    fun addSessionToHistory(context: Context, durationMinutes: Int) {
+        val prefs = getPrefs(context)
+        val historyJson = prefs.getString(KEY_SESSION_HISTORY, "[]")
+        val type = object : TypeToken<MutableList<String>>() {}.type
+        val history: MutableList<String> = Gson().fromJson(historyJson, type)
+        
+        val date = java.text.SimpleDateFormat("MMM dd, hh:mm a", java.util.Locale.getDefault()).format(java.util.Date())
+        history.add(0, "$durationMinutes mins on $date") // Add to top
+        
+        // Keep last 50
+        if (history.size > 50) history.removeAt(history.size - 1)
+        
+        prefs.edit().putString(KEY_SESSION_HISTORY, Gson().toJson(history)).apply()
+    }
+
+    fun getSessionHistory(context: Context): List<String> {
+        val json = getPrefs(context).getString(KEY_SESSION_HISTORY, "[]")
+        val type = object : TypeToken<List<String>>() {}.type
+        return Gson().fromJson(json, type)
     }
 
     fun formatHistoryTime(millis: Long): String {

@@ -1,23 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Foundation -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="background_color">#000000</color>
-    <color name="surface_color">#1C1C1E</color>
-    <color name="primary_color">#FF4500</color> <!-- Vibrant Orange -->
-    <color name="primary_variant">#D84315</color>
-    <color name="error_color">#CF6679</color>
     
-    <!-- New UI Colors -->
-    <color name="orange_accent">#FF5722</color>
-    <color name="orange_dark">#E64A19</color>
-    <color name="gray_dark">#1C1C1E</color>
-    <color name="gray_medium">#2C2C2E</color>
+    <!-- Premium Dark Palette -->
+    <color name="bg_dark_start">#0A0A0B</color>
+    <color name="bg_dark_end">#141416</color>
+    <color name="surface_card">#1C1C1E</color>
+    <color name="surface_elevated">#2C2C2E</color>
+    
+    <!-- Accent Color (Electric Blue) -->
+    <color name="accent_electric_blue">#5E5CE6</color>
+    <color name="accent_glow">#335E5CE6</color> <!-- 20% alpha -->
+    
+    <!-- Text Palette -->
+    <color name="text_primary">#F2F2F7</color>
+    <color name="text_secondary">#8E8E93</color>
+    <color name="text_tertiary">#48484A</color>
+    
+    <!-- Utilities -->
+    <color name="error">#FF453A</color>
+    <color name="success">#32D74B</color>
+    
+    <!-- Backward Compatibility Mapping -->
+    <color name="background_color">#0A0A0B</color>
+    <color name="surface_color">#1C1C1E</color>
     <color name="gray_text">#8E8E93</color>
-    <color name="segment_bg">#2C2C2E</color>
-    <color name="segment_selected">#636366</color>
-    <color name="text_primary">#FFFFFF</color>
-    <color name="text_secondary">#8E8E93</color></resources>
+    <color name="orange_accent">#5E5CE6</color>
+    <color name="orange_dark">#3D3BB0</color> <!-- Darker accent -->
+    <color name="gray_medium">#2C2C2E</color>
+    <color name="primary_color">#FFFFFF</color>
+    <color name="primary_variant">#F2F2F7</color>
+    <color name="purple_500">#5E5CE6</color>
+    <color name="purple_700">#3D3BB0</color>
+    <color name="teal_200">#5E5CE6</color>
+</resources>

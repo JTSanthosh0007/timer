@@ -18,6 +18,7 @@ data class AppInfo(
 
 class AppAdapter(
     private var apps: List<AppInfo>,
+    private val getSelectedCount: () -> Int,
     private val onSelectionChanged: () -> Unit
 ) : RecyclerView.Adapter<AppAdapter.ViewHolder>() {
 
@@ -42,33 +43,35 @@ class AppAdapter(
         val app = apps[position]
         holder.name.text = app.label
         holder.icon.setImageDrawable(app.icon)
-        holder.name.setTextColor(android.graphics.Color.WHITE)
         
         // Social Media Check
         val isSocial = Constants.isSocialMedia(app.packageName)
 
         holder.checkBox.setOnCheckedChangeListener(null)
         holder.checkBox.isChecked = app.isSelected
-        
-        // Logic:
-        // 1. Fixed (Dialer) -> Checkbox Checked & Disabled (Visual only, Logic below)
-        // 2. Social -> Checkbox Unchecked (or previously checked state, but we'll block change) & Enabled (to catch clicks)
-        
-        // We set enabled to true generally to catch clicks for error messages, 
-        // but for Fixed apps we might want to just lock it visualy.
         holder.checkBox.isEnabled = !app.isFixed
 
         val toggleAction = View.OnClickListener {
             if (app.isFixed) return@OnClickListener
             
-            // Social Block
-            if (isSocial) {
-                // Determine if we are trying to check it
-                if (!app.isSelected) { 
-                     // User is trying to select it. BLOCK.
-                     android.widget.Toast.makeText(holder.itemView.context, "Social media apps are not allowed!", android.widget.Toast.LENGTH_SHORT).show()
-                     holder.checkBox.isChecked = false
-                     return@OnClickListener
+            val isCurrentlySelected = app.isSelected
+            // If we are currently NOT selected, we are trying to SELECT it.
+            // Check limitations.
+            if (!isCurrentlySelected) {
+                // 1. Social Block
+                if (isSocial) {
+                    android.widget.Toast.makeText(holder.itemView.context, "Social media apps are not allowed!", android.widget.Toast.LENGTH_SHORT).show()
+                    holder.checkBox.isChecked = false
+                    return@OnClickListener
+                }
+                
+                // 2. Count Limit (Max 5)
+                // We count those that are NOT fixed.
+                val currentCount = getSelectedCount()
+                if (currentCount >= 5) {
+                    android.widget.Toast.makeText(holder.itemView.context, "You can select only up to 5 apps", android.widget.Toast.LENGTH_SHORT).show()
+                    holder.checkBox.isChecked = false
+                    return@OnClickListener
                 }
             }
             
@@ -81,10 +84,21 @@ class AppAdapter(
                 return@setOnCheckedChangeListener
             }
             
-            if (isSocial && isChecked) {
-                 holder.checkBox.isChecked = false
-                 android.widget.Toast.makeText(holder.itemView.context, "Social media apps are not allowed!", android.widget.Toast.LENGTH_SHORT).show()
-                 return@setOnCheckedChangeListener
+            // Logic if User clicked directly on Checkbox
+            if (isChecked) {
+                 // Check Limitations
+                 if (isSocial) {
+                     holder.checkBox.isChecked = false
+                     android.widget.Toast.makeText(holder.itemView.context, "Social media apps are not allowed!", android.widget.Toast.LENGTH_SHORT).show()
+                     return@setOnCheckedChangeListener
+                 }
+                 
+                 val currentCount = getSelectedCount()
+                 if (currentCount >= 5) {
+                     holder.checkBox.isChecked = false
+                     android.widget.Toast.makeText(holder.itemView.context, "You can select only up to 5 apps", android.widget.Toast.LENGTH_SHORT).show()
+                     return@setOnCheckedChangeListener
+                 }
             }
             
             app.isSelected = isChecked

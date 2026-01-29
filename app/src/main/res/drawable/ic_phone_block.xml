@@ -26,7 +26,7 @@
     <!-- Block line -->
     <path
         android:pathData="M9.17,5.17L14.83,10.83"
-        android:strokeColor="#FF5722"
+        android:strokeColor="#000000"
         android:strokeWidth="1.5"
         android:strokeLineCap="round"/>
 

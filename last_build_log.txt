@@ -1,6 +1,0 @@
-﻿> Task :app:preBuild UP-TO-DATE
-> Task :app:preDebugBuild UP-TO-DATE
-> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
-> Task :app:checkKotlinGradlePluginConfigurationErrors
-> Task :app:checkDebugAarMetadata FAILED
-2 actionable tasks: 2 executed

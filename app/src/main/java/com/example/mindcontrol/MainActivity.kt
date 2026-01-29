@@ -40,6 +40,14 @@ class MainActivity : AppCompatActivity() {
     private lateinit var npHour: NumberPicker
     private lateinit var npMinute: NumberPicker
     private lateinit var progressTimer: CircularProgressIndicator
+    
+    // New bindings for UI control
+    private lateinit var tvFocusLabel: TextView
+    private lateinit var tvTitle: TextView
+    private lateinit var btnPremium: TextView
+    // private lateinit var bottomNav: LinearLayout (Removed)
+    private lateinit var btnStartContainer: LinearLayout
+    private lateinit var segmentedControl: LinearLayout
 
     private lateinit var endedLayout: androidx.constraintlayout.widget.ConstraintLayout
     private lateinit var tvEndTimeValue: TextView
@@ -87,39 +95,27 @@ class MainActivity : AppCompatActivity() {
 
         // Bind Views
         // Bind Views
+        // Bind Views
         rvApps = findViewById(R.id.rvApps)
         etSearch = findViewById(R.id.etSearch)
         btnStart = findViewById(R.id.btnStart)
         tvSelectedApps = findViewById(R.id.tvSelectedApps)
         setupLayout = findViewById(R.id.setupLayout)
-        lockedLayout = findViewById(R.id.lockedLayout) // Note: This is now a ConstraintLayout in XML
+        lockedLayout = findViewById(R.id.lockedLayout)
         endedLayout = findViewById(R.id.endedLayout)
         tvTimer = findViewById(R.id.tvTimer)
         progressTimer = findViewById(R.id.progressTimer)
         tvEndTimeValue = findViewById(R.id.tvEndTimeValue)
         
-        // Dock Listeners
-        findViewById<View>(R.id.dockPhone)?.setOnClickListener {
-             val intent = Intent(Intent.ACTION_DIAL)
-             startActivity(intent)
-        }
+        // Bind additional views for search mode
+        tvFocusLabel = findViewById(R.id.tvFocusLabel)
+        tvTitle = findViewById(R.id.tvTitle)
+        btnPremium = findViewById(R.id.btnPremium)
+        btnStartContainer = findViewById(R.id.btnStartContainer)
+        segmentedControl = findViewById(R.id.segmentedControl)
+        val tvSelectedTime = findViewById<TextView>(R.id.tvSelectedTime)
+        val customPickerContainer = findViewById<LinearLayout>(R.id.customPickerContainer)
         
-        findViewById<View>(R.id.dockMessage)?.setOnClickListener {
-             val defaultSms = android.provider.Telephony.Sms.getDefaultSmsPackage(this)
-             if (defaultSms != null) {
-                 val intent = packageManager.getLaunchIntentForPackage(defaultSms)
-                 if (intent != null) startActivity(intent)
-             } else {
-                 val intent = Intent(Intent.ACTION_MAIN)
-                 intent.addCategory(Intent.CATEGORY_APP_MESSAGING)
-                 startActivity(intent)
-             }
-        }
-        
-        findViewById<View>(R.id.dockApps)?.setOnClickListener {
-             showAllowedAppsDialog()
-        }
-
         // Ended Screen Listeners
         findViewById<Button>(R.id.btnCheck)?.setOnClickListener {
             stopAlarm()
@@ -143,10 +139,9 @@ class MainActivity : AppCompatActivity() {
         // Tab Linking
         val btnTabPhone = findViewById<TextView>(R.id.btnTabPhone)
         val btnTabApp = findViewById<TextView>(R.id.btnTabApp)
-        val btnTabSchedule = findViewById<TextView>(R.id.btnTabSchedule)
+        // val btnTabSchedule (Removed)
         val timerSection = findViewById<LinearLayout>(R.id.timerSection)
         val appListContainer = findViewById<LinearLayout>(R.id.appListContainer)
-        val scheduleHistory = findViewById<TextView>(R.id.tvScheduleHistory)
 
         btnTabPhone.setOnClickListener {
             // Select Phone
@@ -180,25 +175,52 @@ class MainActivity : AppCompatActivity() {
             updateSelectedAppsSummary()
         }
         
-        btnTabSchedule.setOnClickListener {
-            // Show last lock duration if available
-            val prefs = getSharedPreferences("lock_history", Context.MODE_PRIVATE)
-            val last = prefs.getInt("last_duration", 0)
-            if (last > 0) {
-                val hours = last / 60
-                val minutes = last % 60
-                scheduleHistory.text = "Last: ${hours}h ${minutes}m (Tap to repeat)"
-                scheduleHistory.visibility = View.VISIBLE
-                scheduleHistory.setOnClickListener {
-                    performLock(hours, minutes)
-                }
-            } else {
-                scheduleHistory.text = "No history yet"
-                scheduleHistory.visibility = View.VISIBLE
-            }
-            timerSection.visibility = View.GONE
-            appListContainer.visibility = View.GONE
+        // Setup History Logic
+        loadSessionHistory()
+
+        // --- NEW PREMIUM UI LOGIC ---
+
+        // Helper to update display
+        fun updateDisplay(h: Int, m: Int) {
+            tvSelectedTime.text = String.format("%02d:%02d:00", h, m)
         }
+
+        // Chip Logic
+        val chips = listOf(
+            findViewById<Button>(R.id.chip15m),
+            findViewById<Button>(R.id.chip30m),
+            findViewById<Button>(R.id.chip1h),
+            findViewById<Button>(R.id.chip2h),
+            findViewById<Button>(R.id.chipCustom)
+        )
+
+        fun selectChip(selected: Button, h: Int, m: Int, isCustom: Boolean) {
+            chips.forEach {
+                it.setBackgroundResource(R.drawable.bg_segment_container)
+                it.setTextColor(getColor(R.color.text_secondary))
+            }
+            selected.setBackgroundResource(R.drawable.bg_segment_selected)
+            selected.setTextColor(getColor(R.color.text_primary))
+            
+            customPickerContainer.visibility = if (isCustom) View.VISIBLE else View.GONE
+            
+            if (!isCustom) {
+                npHour.value = h
+                npMinute.value = m
+                updateDisplay(h, m)
+            } else {
+                updateDisplay(npHour.value, npMinute.value)
+            }
+        }
+
+        findViewById<Button>(R.id.chip15m).setOnClickListener { selectChip(it as Button, 0, 15, false) }
+        findViewById<Button>(R.id.chip30m).setOnClickListener { selectChip(it as Button, 0, 30, false) }
+        findViewById<Button>(R.id.chip1h).setOnClickListener { selectChip(it as Button, 1, 0, false) }
+        findViewById<Button>(R.id.chip2h).setOnClickListener { selectChip(it as Button, 2, 0, false) }
+        findViewById<Button>(R.id.chipCustom).setOnClickListener { selectChip(it as Button, 0, 0, true) }
+
+        // Default: 1h
+        selectChip(findViewById(R.id.chip1h), 1, 0, false)
         
         // Setup Pickers (White Text Hack)
         // ... (Keep existing Logic)
@@ -216,27 +238,37 @@ class MainActivity : AppCompatActivity() {
         // Add Haptic/Click Feedback with explicit Vibration
         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as android.os.Vibrator
         val soundListener = NumberPicker.OnValueChangeListener { picker, _, _ ->
+             updateDisplay(npHour.value, npMinute.value)
+             
              // Explicit Vibration for clearer feedback
              if (Build.VERSION.SDK_INT >= 26) {
-                 // 80ms duration, 255 (MAX) amplitude for much stronger feedback
                  vibrator.vibrate(android.os.VibrationEffect.createOneShot(80, 255))
              } else {
                  vibrator.vibrate(80)
              }
-             
-             // Sound: CLICK is standard and widely supported
              picker.playSoundEffect(android.view.SoundEffectConstants.CLICK)
         }
         npHour.setOnValueChangedListener(soundListener)
         npMinute.setOnValueChangedListener(soundListener)
 
         rvApps.layoutManager = LinearLayoutManager(this)
-        adapter = AppAdapter(displayApps) {
+        
+        // Pass a lambda to count globally selected apps (excluding fixed ones like Dialer/SMS)
+        adapter = AppAdapter(displayApps, {
+            allApps.count { it.isSelected && !it.isFixed }
+        }) {
             updateSelectedAppsSummary()
         }
         rvApps.adapter = adapter
 
         btnStart.setOnClickListener { startFocusMode() }
+        
+        findViewById<TextView>(R.id.btnPreview).setOnClickListener {
+            // Show a quick 10-second preview lock
+            Toast.makeText(this, "Starting 10-second preview...", Toast.LENGTH_SHORT).show()
+            performLock(0, 0, true) // Pass a flag for preview if needed, or just 10s
+        }
+        
         updateSelectedAppsSummary()
 
         etSearch.addTextChangedListener(object : TextWatcher {
@@ -247,8 +279,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
         
-        // Keep app list visible when search gets focus
+        // Keep app list visible when search gets focus and toggle "Search Mode"
         etSearch.setOnFocusChangeListener { _, hasFocus ->
+            toggleSearchMode(hasFocus)
+            
             if (hasFocus) {
                 val appListContainer = findViewById<LinearLayout>(R.id.appListContainer)
                 val timerSection = findViewById<LinearLayout>(R.id.timerSection)
@@ -263,6 +297,16 @@ class MainActivity : AppCompatActivity() {
                 btnTabPhone.setBackgroundResource(0)
                 btnTabPhone.setTextColor(getColor(R.color.gray_text))
             }
+        }
+        
+        etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == android.view.inputmethod.EditorInfo.IME_ACTION_DONE) {
+                etSearch.clearFocus()
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as android.view.inputmethod.InputMethodManager
+                imm.hideSoftInputFromWindow(etSearch.windowToken, 0)
+                return@setOnEditorActionListener true
+            }
+            false
         }
         
         // Initial check
@@ -344,7 +388,24 @@ class MainActivity : AppCompatActivity() {
             // Block back button
             return
         }
+        if (etSearch.hasFocus()) {
+            etSearch.clearFocus()
+            return
+        }
         super.onBackPressed()
+    }
+    
+    private fun toggleSearchMode(active: Boolean) {
+        val visibility = if (active) View.GONE else View.VISIBLE
+        
+        tvFocusLabel.visibility = visibility
+        tvTitle.visibility = visibility
+        btnPremium.visibility = visibility
+        btnStartContainer.visibility = visibility
+        segmentedControl.visibility = visibility
+        findViewById<View>(R.id.timerSection).visibility = visibility
+        findViewById<View>(R.id.historyScrollView).visibility = visibility
+        findViewById<View>(R.id.tvHistoryHeader).visibility = visibility
     }
 
     // Reliable UI Update Loop
@@ -452,15 +513,45 @@ class MainActivity : AppCompatActivity() {
                  progressTimer.progress = 0
             }
             
+            // Populate Allowed Apps Dock (only if needed/not already set up with same data)
+            setupAllowedAppsDock()
+            
         } else {
             setupLayout.visibility = View.VISIBLE
             lockedLayout.visibility = View.GONE
+            loadSessionHistory() // Refresh history when returning to setup
         }
         // If timer just finished or unlocked, exit lock task mode
         if (!Utils.isLocked(this)) {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
                 try { stopLockTask() } catch (_: Exception) {}
             }
+        }
+    }
+
+    private var lastAllowedPackages: Set<String>? = null
+    
+    private fun setupAllowedAppsDock() {
+        val allowedPackages = Utils.getAllowedApps(this)
+        if (allowedPackages == lastAllowedPackages) return
+        lastAllowedPackages = allowedPackages
+
+        val allowedAppsList = mutableListOf<AppInfo>()
+        val pm = packageManager
+        for (pkg in allowedPackages) {
+            try {
+                val appInfo = pm.getApplicationInfo(pkg, 0)
+                val label = pm.getApplicationLabel(appInfo).toString()
+                val icon = pm.getApplicationIcon(appInfo)
+                allowedAppsList.add(AppInfo(label, pkg, icon))
+            } catch (e: Exception) {}
+        }
+        
+        val rvAllowed = findViewById<RecyclerView>(R.id.rvAllowedApps)
+        rvAllowed.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        rvAllowed.adapter = AllowedAppAdapter(allowedAppsList) { app ->
+             val launchIntent = pm.getLaunchIntentForPackage(app.packageName)
+             if (launchIntent != null) startActivity(launchIntent)
         }
     }
 
@@ -623,44 +714,20 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        // Build list of allowed apps
-        val selectedAppsList = allApps.filter { it.isSelected && !it.isFixed }.map { it.label }
-        
-        val sb = StringBuilder()
-        sb.append("You are about to lock your phone.\n\n")
-        sb.append("Allowed Apps:\n")
-        sb.append("• Phone\n")
-        sb.append("• Messages\n")
-        
-        for (appLabel in selectedAppsList) {
-            sb.append("• $appLabel\n")
-        }
-        
-        if (selectedAppsList.isEmpty()) {
-            sb.append("\n(No other apps selected)\n")
-        }
-        
-        sb.append("\nAre you sure you want to start?")
-
-        androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Confirm Focus Mode")
-            .setMessage(sb.toString())
-            .setPositiveButton("Start Lock") { _, _ ->
-                performLock(hours, minutes)
-            }
-            .setNegativeButton("Cancel", null)
-            .show()
+        // Direct Lock (as requested: "it shoud not ask ok dricet it must pin")
+        performLock(hours, minutes)
     }
 
-    private fun performLock(hours: Int, minutes: Int) {
+    private fun performLock(hours: Int, minutes: Int, isPreview: Boolean = false) {
         val totalMinutes = (hours * 60) + minutes
+        val durationMillis = if (isPreview) 10000L else totalMinutes * 60 * 1000L
 
-        // Save to history
-        val prefs = getSharedPreferences("lock_history", Context.MODE_PRIVATE)
-        prefs.edit().putInt("last_duration", totalMinutes).apply()
+        if (!isPreview) {
+            // Save to history
+            Utils.addSessionToHistory(this, totalMinutes)
+        }
 
         // Save State
-        // IMPORTANT: We filter from ALL apps, not just displayed apps
         val selectedPackages = allApps.filter { it.isSelected }.map { it.packageName }.toMutableSet()
         
         // Ensure Default Dialer & SMS are ALWAYS allowed
@@ -675,7 +742,6 @@ class MainActivity : AppCompatActivity() {
         
         Utils.setAllowedApps(this, selectedPackages)
         
-        val durationMillis = totalMinutes * 60 * 1000L
         val endTime = System.currentTimeMillis() + durationMillis
         Utils.setTimer(this, endTime, durationMillis)
 
@@ -699,5 +765,34 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return false
+    }
+
+    private fun loadSessionHistory() {
+        val historyContainer = findViewById<LinearLayout>(R.id.historyContainer)
+        historyContainer.removeAllViews()
+        
+        val history = Utils.getSessionHistory(this)
+        if (history.isEmpty()) {
+            val tv = TextView(this)
+            tv.text = "No history yet"
+            tv.setTextColor(getColor(R.color.text_secondary))
+            tv.setPadding(32, 32, 32, 32)
+            historyContainer.addView(tv)
+        } else {
+            for (item in history) {
+                val tv = TextView(this)
+                tv.text = "• $item"
+                tv.setTextColor(getColor(R.color.text_primary))
+                tv.textSize = 14f
+                tv.setPadding(16, 12, 16, 12)
+                historyContainer.addView(tv)
+                
+                // Add a small divider
+                val divider = View(this)
+                divider.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1)
+                divider.setBackgroundColor(getColor(R.color.surface_elevated))
+                historyContainer.addView(divider)
+            }
+        }
     }
 }
