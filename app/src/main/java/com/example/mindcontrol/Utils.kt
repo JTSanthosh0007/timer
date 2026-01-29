@@ -7,15 +7,22 @@ import com.google.gson.reflect.TypeToken
 
 object Utils {
 
-    private const val PREFS_NAME = "mindcontrol_prefs"
+    private const val PREFS_NAME = "keep_my_phone_out_prefs"
     private const val KEY_ALLOWED_APPS = "allowed_apps"
     private const val KEY_TIMER_END_TIME = "timer_end_time"
     private const val KEY_IS_LOCKED = "is_locked"
-    private const val KEY_SESSION_HISTORY = "session_history"
+    private const val KEY_SESSION_HISTORY = "session_history_v2"
+    
+    data class SessionRecord(
+        val durationMinutes: Int,
+        val allowedApps: List<String>,
+        val timestamp: Long,
+        val dateString: String
+    )
     
     // Broadcast Actions
-    const val ACTION_TIMER_TICK = "com.example.mindcontrol.TIMER_TICK"
-    const val ACTION_TIMER_FINISHED = "com.example.mindcontrol.TIMER_FINISHED"
+    const val ACTION_TIMER_TICK = "com.example.keepmyphoneout.TIMER_TICK"
+    const val ACTION_TIMER_FINISHED = "com.example.keepmyphoneout.TIMER_FINISHED"
     const val EXTRA_TIME_REMAINING = "time_remaining"
 
     private fun getPrefs(context: Context): SharedPreferences {
@@ -88,11 +95,15 @@ object Utils {
     fun addSessionToHistory(context: Context, durationMinutes: Int) {
         val prefs = getPrefs(context)
         val historyJson = prefs.getString(KEY_SESSION_HISTORY, "[]")
-        val type = object : TypeToken<MutableList<String>>() {}.type
-        val history: MutableList<String> = Gson().fromJson(historyJson, type)
+        val type = object : TypeToken<MutableList<SessionRecord>>() {}.type
+        val history: MutableList<SessionRecord> = Gson().fromJson(historyJson, type)
         
+        val allowedApps = getAllowedApps(context).toList()
+        val timestamp = System.currentTimeMillis()
         val date = java.text.SimpleDateFormat("MMM dd, hh:mm a", java.util.Locale.getDefault()).format(java.util.Date())
-        history.add(0, "$durationMinutes mins on $date") // Add to top
+        
+        val record = SessionRecord(durationMinutes, allowedApps, timestamp, date)
+        history.add(0, record) // Add to top
         
         // Keep last 50
         if (history.size > 50) history.removeAt(history.size - 1)
@@ -100,10 +111,24 @@ object Utils {
         prefs.edit().putString(KEY_SESSION_HISTORY, Gson().toJson(history)).apply()
     }
 
-    fun getSessionHistory(context: Context): List<String> {
+    fun getSessionHistoryRecords(context: Context): List<SessionRecord> {
         val json = getPrefs(context).getString(KEY_SESSION_HISTORY, "[]")
-        val type = object : TypeToken<List<String>>() {}.type
+        val type = object : TypeToken<List<SessionRecord>>() {}.type
         return Gson().fromJson(json, type)
+    }
+
+    fun getSessionHistory(context: Context): List<String> {
+        return getSessionHistoryRecords(context).map { "${it.durationMinutes} mins on ${it.dateString}" }
+    }
+
+    fun clearHistory(context: Context) {
+        getPrefs(context).edit().remove(KEY_SESSION_HISTORY).apply()
+    }
+
+    fun removeHistoryItem(context: Context, timestamp: Long) {
+        val history = getSessionHistoryRecords(context).toMutableList()
+        history.removeAll { it.timestamp == timestamp }
+        getPrefs(context).edit().putString(KEY_SESSION_HISTORY, Gson().toJson(history)).apply()
     }
 
     fun formatHistoryTime(millis: Long): String {

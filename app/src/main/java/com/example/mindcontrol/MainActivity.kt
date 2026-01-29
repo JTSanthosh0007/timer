@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     // New bindings for UI control
     private lateinit var tvFocusLabel: TextView
     private lateinit var tvTitle: TextView
-    private lateinit var btnPremium: TextView
+    private lateinit var btnHistoryTop: TextView
     // private lateinit var bottomNav: LinearLayout (Removed)
     private lateinit var btnStartContainer: LinearLayout
     private lateinit var segmentedControl: LinearLayout
@@ -110,7 +110,11 @@ class MainActivity : AppCompatActivity() {
         // Bind additional views for search mode
         tvFocusLabel = findViewById(R.id.tvFocusLabel)
         tvTitle = findViewById(R.id.tvTitle)
-        btnPremium = findViewById(R.id.btnPremium)
+        btnHistoryTop = findViewById(R.id.btnHistoryTop)
+        btnHistoryTop.setOnClickListener {
+            // Using request code 102 for History restoration
+            startActivityForResult(Intent(this, HistoryActivity::class.java), 102)
+        }
         btnStartContainer = findViewById(R.id.btnStartContainer)
         segmentedControl = findViewById(R.id.segmentedControl)
         val tvSelectedTime = findViewById<TextView>(R.id.tvSelectedTime)
@@ -175,8 +179,7 @@ class MainActivity : AppCompatActivity() {
             updateSelectedAppsSummary()
         }
         
-        // Setup History Logic
-        loadSessionHistory()
+        // Setup History Logic (Moved to HistoryActivity)
 
         // --- NEW PREMIUM UI LOGIC ---
 
@@ -219,8 +222,8 @@ class MainActivity : AppCompatActivity() {
         findViewById<Button>(R.id.chip2h).setOnClickListener { selectChip(it as Button, 2, 0, false) }
         findViewById<Button>(R.id.chipCustom).setOnClickListener { selectChip(it as Button, 0, 0, true) }
 
-        // Default: 1h
-        selectChip(findViewById(R.id.chip1h), 1, 0, false)
+        // Default: 15m
+        selectChip(findViewById(R.id.chip15m), 0, 15, false)
         
         // Setup Pickers (White Text Hack)
         // ... (Keep existing Logic)
@@ -228,7 +231,7 @@ class MainActivity : AppCompatActivity() {
         npHour.maxValue = 23
         npMinute.minValue = 0
         npMinute.maxValue = 59
-        npMinute.value = 1 // Default 1 min
+        npMinute.value = 15 // Default 15 min
         
         // Formatter for 00 style
         val formatter = NumberPicker.Formatter { i -> String.format("%02d", i) }
@@ -262,12 +265,6 @@ class MainActivity : AppCompatActivity() {
         rvApps.adapter = adapter
 
         btnStart.setOnClickListener { startFocusMode() }
-        
-        findViewById<TextView>(R.id.btnPreview).setOnClickListener {
-            // Show a quick 10-second preview lock
-            Toast.makeText(this, "Starting 10-second preview...", Toast.LENGTH_SHORT).show()
-            performLock(0, 0, true) // Pass a flag for preview if needed, or just 10s
-        }
         
         updateSelectedAppsSummary()
 
@@ -311,7 +308,7 @@ class MainActivity : AppCompatActivity() {
         
         // Initial check
         if (!isAccessibilityServiceEnabled()) {
-            Toast.makeText(this, "Please Enable Accessibility Service first!", Toast.LENGTH_LONG).show()
+            Toast.makeText(this, "Please Enable Accessibility Service for Keep My Phone Out to help you focus.", Toast.LENGTH_LONG).show()
             val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
             startActivity(intent)
         }
@@ -330,9 +327,9 @@ class MainActivity : AppCompatActivity() {
                 android.view.WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON or
                 android.view.WindowManager.LayoutParams.FLAG_FULLSCREEN
             )
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                startLockTask()
-            }
+            // Removed startLockTask() to allow "Selected Apps" to work seamlessly 
+            // and avoid the annoying "App is pinned" system dialog.
+            // Accessibility Service (LockService) now handles all blocking.
             updateUIState()
         } else {
             loadApps()
@@ -344,10 +341,11 @@ class MainActivity : AppCompatActivity() {
         // Load Native Ad
         val adLoader = com.google.android.gms.ads.AdLoader.Builder(this, "ca-app-pub-4060024795112786/6134252090")
             .forNativeAd { nativeAd ->
-                val adFrame = findViewById<android.widget.FrameLayout>(R.id.ad_frame)
+                val adFrame = findViewById<android.widget.FrameLayout>(R.id.ad_frame) ?: return@forNativeAd
                 
                 // Inflate Native Ad View
-                val adView = layoutInflater.inflate(R.layout.ad_native, null) as com.google.android.gms.ads.nativead.NativeAdView
+                val adView = layoutInflater.inflate(R.layout.ad_native, null) as? com.google.android.gms.ads.nativead.NativeAdView
+                if (adView == null) return@forNativeAd
                 
                 // Populate Assets
                 adView.headlineView = adView.findViewById(R.id.ad_headline)
@@ -357,15 +355,15 @@ class MainActivity : AppCompatActivity() {
                 adView.advertiserView = adView.findViewById(R.id.ad_advertiser)
                 
                 // Set Text
-                (adView.headlineView as TextView).text = nativeAd.headline
-                (adView.bodyView as TextView).text = nativeAd.body
-                (adView.callToActionView as Button).text = nativeAd.callToAction
-                (adView.advertiserView as TextView).text = nativeAd.advertiser
+                (adView.headlineView as? TextView)?.text = nativeAd.headline
+                (adView.bodyView as? TextView)?.text = nativeAd.body
+                (adView.callToActionView as? Button)?.text = nativeAd.callToAction
+                (adView.advertiserView as? TextView)?.text = nativeAd.advertiser
                 
                 // Set Icon
                 val icon = nativeAd.icon
                 if (icon != null) {
-                    (adView.iconView as android.widget.ImageView).setImageDrawable(icon.drawable)
+                    (adView.iconView as? android.widget.ImageView)?.setImageDrawable(icon.drawable)
                     adView.iconView?.visibility = View.VISIBLE
                 } else {
                     adView.iconView?.visibility = View.GONE
@@ -400,12 +398,10 @@ class MainActivity : AppCompatActivity() {
         
         tvFocusLabel.visibility = visibility
         tvTitle.visibility = visibility
-        btnPremium.visibility = visibility
+        btnHistoryTop.visibility = visibility
         btnStartContainer.visibility = visibility
         segmentedControl.visibility = visibility
         findViewById<View>(R.id.timerSection).visibility = visibility
-        findViewById<View>(R.id.historyScrollView).visibility = visibility
-        findViewById<View>(R.id.tvHistoryHeader).visibility = visibility
     }
 
     // Reliable UI Update Loop
@@ -421,7 +417,11 @@ class MainActivity : AppCompatActivity() {
                     tvTimer.text = Utils.formatTime(remaining)
                     if (totalDuration > 0) {
                          val progress = ((remaining.toFloat() / totalDuration.toFloat()) * 1000).toInt()
-                         progressTimer.progress = progress
+                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                             progressTimer.setProgress(progress, true)
+                         } else {
+                             progressTimer.progress = progress
+                         }
                     }
                 } else {
                     tvTimer.text = "00:00:00"
@@ -431,11 +431,37 @@ class MainActivity : AppCompatActivity() {
                     // If time is up, the service triggers FINISHED.
                 }
                 
-                // Update frequently for smoothness
                 uiHandler.postDelayed(this, 500)
             } else {
                 // If not locked, stop updates
                 uiHandler.removeCallbacks(this)
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 102 && resultCode == RESULT_OK) {
+            val durationMins = data?.getIntExtra("restore_duration_mins", -1) ?: -1
+            if (durationMins != -1) {
+                // Restore Duration
+                val h = durationMins / 60
+                val m = durationMins % 60
+                npHour.value = h
+                npMinute.value = m
+                
+                // Update the visual timer display (HH:MM:00)
+                val tvSelectedTime = findViewById<TextView>(R.id.tvSelectedTime)
+                tvSelectedTime?.text = String.format("%02d:%02d:00", h, m)
+                
+                // Refresh Apps to show updated "isSelected" checkboxes
+                loadApps()
+                
+                Toast.makeText(this, "Settings restored from history!", Toast.LENGTH_SHORT).show()
+                
+                // If it was more than 1h, it might have been a preset. 
+                // We'll just set it to 'Custom' mode visually or let it be.
+                // Best to switch to the App Block tab if apps were restored too?
             }
         }
     }
@@ -494,11 +520,14 @@ class MainActivity : AppCompatActivity() {
             setupLayout.visibility = View.GONE
             lockedLayout.visibility = View.VISIBLE
             
+            // Software Pinning is enforced by LockService (Accessibility),
+            // which blocks the Home screen and unallowed apps automatically.
+
             val endTime = Utils.getEndTime(this)
             val totalDuration = Utils.getTotalDuration(this)
             val remaining = endTime - System.currentTimeMillis()
             
-            // Format End Time (e.g. Jan 28, 12 pm)
+            // Format End Time
             val sdf = java.text.SimpleDateFormat("MMM dd, h:mm a", Locale.getDefault())
             tvEndTimeValue.text = sdf.format(java.util.Date(endTime))
             
@@ -506,26 +535,22 @@ class MainActivity : AppCompatActivity() {
                  tvTimer.text = Utils.formatTime(remaining)
                  if (totalDuration > 0) {
                      val progress = ((remaining.toFloat() / totalDuration.toFloat()) * 1000).toInt()
-                     progressTimer.progress = progress
+                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                         progressTimer.setProgress(progress, true)
+                     } else {
+                         progressTimer.progress = progress
+                     }
                  }
             } else {
                  tvTimer.text = "00:00:00"
                  progressTimer.progress = 0
             }
             
-            // Populate Allowed Apps Dock (only if needed/not already set up with same data)
             setupAllowedAppsDock()
             
         } else {
             setupLayout.visibility = View.VISIBLE
             lockedLayout.visibility = View.GONE
-            loadSessionHistory() // Refresh history when returning to setup
-        }
-        // If timer just finished or unlocked, exit lock task mode
-        if (!Utils.isLocked(this)) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-                try { stopLockTask() } catch (_: Exception) {}
-            }
         }
     }
 
@@ -547,11 +572,17 @@ class MainActivity : AppCompatActivity() {
             } catch (e: Exception) {}
         }
         
-        val rvAllowed = findViewById<RecyclerView>(R.id.rvAllowedApps)
+        val rvAllowed = findViewById<RecyclerView>(R.id.rvAllowedApps) ?: return
         rvAllowed.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         rvAllowed.adapter = AllowedAppAdapter(allowedAppsList) { app ->
              val launchIntent = pm.getLaunchIntentForPackage(app.packageName)
-             if (launchIntent != null) startActivity(launchIntent)
+             if (launchIntent != null) {
+                 try {
+                     startActivity(launchIntent)
+                 } catch (e: Exception) {
+                     Toast.makeText(this, "Cannot launch ${app.label}", Toast.LENGTH_SHORT).show()
+                 }
+             }
         }
     }
 
@@ -637,6 +668,8 @@ class MainActivity : AppCompatActivity() {
         val defaultDialer = getSystemService(android.telecom.TelecomManager::class.java).defaultDialerPackage
         val defaultSms = android.provider.Telephony.Sms.getDefaultSmsPackage(this)
         
+        val allowedApps = Utils.getAllowedApps(this)
+        
         allApps.clear()
         for (resolveInfo in apps) {
             val packageName = resolveInfo.activityInfo.packageName
@@ -650,7 +683,10 @@ class MainActivity : AppCompatActivity() {
             val isSms = packageName == defaultSms
             val isDefaultApp = isDialer || isSms
             
-            allApps.add(AppInfo(label, packageName, icon, isSelected = isDefaultApp, isFixed = isDefaultApp))
+            // Restore selection from Utils if it exists, otherwise use defaults
+            val isSelected = isDefaultApp || allowedApps.contains(packageName)
+            
+            allApps.add(AppInfo(label, packageName, icon, isSelected = isSelected, isFixed = isDefaultApp))
         }
         
         // Sort: Fixed first, then A-Z
@@ -718,14 +754,12 @@ class MainActivity : AppCompatActivity() {
         performLock(hours, minutes)
     }
 
-    private fun performLock(hours: Int, minutes: Int, isPreview: Boolean = false) {
+    private fun performLock(hours: Int, minutes: Int) {
         val totalMinutes = (hours * 60) + minutes
-        val durationMillis = if (isPreview) 10000L else totalMinutes * 60 * 1000L
+        val durationMillis = totalMinutes * 60 * 1000L
 
-        if (!isPreview) {
-            // Save to history
-            Utils.addSessionToHistory(this, totalMinutes)
-        }
+        // Save to history
+        Utils.addSessionToHistory(this, totalMinutes)
 
         // Save State
         val selectedPackages = allApps.filter { it.isSelected }.map { it.packageName }.toMutableSet()
@@ -767,32 +801,5 @@ class MainActivity : AppCompatActivity() {
         return false
     }
 
-    private fun loadSessionHistory() {
-        val historyContainer = findViewById<LinearLayout>(R.id.historyContainer)
-        historyContainer.removeAllViews()
-        
-        val history = Utils.getSessionHistory(this)
-        if (history.isEmpty()) {
-            val tv = TextView(this)
-            tv.text = "No history yet"
-            tv.setTextColor(getColor(R.color.text_secondary))
-            tv.setPadding(32, 32, 32, 32)
-            historyContainer.addView(tv)
-        } else {
-            for (item in history) {
-                val tv = TextView(this)
-                tv.text = "• $item"
-                tv.setTextColor(getColor(R.color.text_primary))
-                tv.textSize = 14f
-                tv.setPadding(16, 12, 16, 12)
-                historyContainer.addView(tv)
-                
-                // Add a small divider
-                val divider = View(this)
-                divider.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 1)
-                divider.setBackgroundColor(getColor(R.color.surface_elevated))
-                historyContainer.addView(divider)
-            }
-        }
-    }
+
 }

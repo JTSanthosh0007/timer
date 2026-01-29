@@ -19,10 +19,11 @@
             android:id="@+id/tvFocusLabel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="72dp"
             android:text="Focus Mode"
             android:textColor="@color/text_primary"
-            android:textSize="32sp"
+            android:textSize="34sp"
+            android:letterSpacing="-0.02"
             android:fontFamily="sans-serif-black"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,25 +32,29 @@
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:alpha="0.7"
-            android:text="Stay intentional. Eliminate distractions."
+            android:layout_marginTop="10dp"
+            android:alpha="0.6"
+            android:text="Stay intentional. Stay productive."
             android:textColor="@color/text_secondary"
-            android:textSize="16sp"
+            android:textSize="17sp"
+            android:letterSpacing="-0.01"
+            android:fontFamily="sans-serif-medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvFocusLabel" />
 
-        <!-- Pro Badge -->
+        <!-- History Button -->
         <TextView
-            android:id="@+id/btnPremium"
+            android:id="@+id/btnHistoryTop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_segment_selected"
-            android:paddingHorizontal="12sp"
-            android:paddingVertical="6sp"
-            android:text="PRO"
+            android:background="@drawable/bg_segment_container"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="8dp"
+            android:text="HISTORY"
             android:textColor="@color/accent_electric_blue"
-            android:textSize="10sp"
+            android:textSize="11sp"
+            android:letterSpacing="0.05"
+            android:fontFamily="sans-serif-medium"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="@id/tvFocusLabel"
             app:layout_constraintBottom_toBottomOf="@id/tvFocusLabel"
@@ -73,7 +78,7 @@
                 android:layout_weight="1"
                 android:background="@drawable/bg_segment_selected"
                 android:gravity="center"
-                android:text="Phone Lock"
+                android:text="Full Focus"
                 android:textColor="@color/text_primary"
                 android:textSize="14sp"
                 android:fontFamily="sans-serif-medium" />
@@ -84,177 +89,198 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="App Block"
+                android:text="Selective Focus"
                 android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
         </LinearLayout>
 
-        <!-- Time Picker Section -->
-        <LinearLayout
-            android:id="@+id/timerSection"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:gravity="center"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/segmentedControl"
-            app:layout_constraintBottom_toTopOf="@id/btnStartContainer"
-            app:layout_constraintVertical_bias="0.2">
-
-            <!-- Current Selection Display -->
-            <TextView
-                android:id="@+id/tvSelectedTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="01:00:00"
-                android:textColor="@color/text_primary"
-                android:textSize="64sp"
-                android:fontFamily="sans-serif-thin" />
-
-            <!-- Preset Chips -->
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:scrollbars="none"
-                android:clipToPadding="false"
-                android:paddingHorizontal="16dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/chip15m"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="72dp"
-                        android:layout_height="44dp"
-                        android:background="@drawable/bg_segment_container"
-                        android:text="15m"
-                        android:textAllCaps="false"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginEnd="8dp" />
-
-                    <Button
-                        android:id="@+id/chip30m"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="72dp"
-                        android:layout_height="44dp"
-                        android:background="@drawable/bg_segment_container"
-                        android:text="30m"
-                        android:textAllCaps="false"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginEnd="8dp" />
-
-                    <Button
-                        android:id="@+id/chip1h"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="72dp"
-                        android:layout_height="44dp"
-                        android:background="@drawable/bg_segment_selected"
-                        android:text="1h"
-                        android:textAllCaps="false"
-                        android:textColor="@color/text_primary"
-                        android:layout_marginEnd="8dp" />
-
-                    <Button
-                        android:id="@+id/chip2h"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="72dp"
-                        android:layout_height="44dp"
-                        android:background="@drawable/bg_segment_container"
-                        android:text="2h"
-                        android:textAllCaps="false"
-                        android:textColor="@color/text_secondary"
-                        android:layout_marginEnd="8dp" />
-
-                    <Button
-                        android:id="@+id/chipCustom"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="84dp"
-                        android:layout_height="44dp"
-                        android:background="@drawable/bg_segment_container"
-                        android:text="Custom"
-                        android:textAllCaps="false"
-                        android:textColor="@color/text_secondary" />
-                </LinearLayout>
-            </HorizontalScrollView>
-
-            <!-- Custom Picker (Positioned above button) -->
-            <LinearLayout
-                android:id="@+id/customPickerContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:gravity="center"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal">
-                
-                <NumberPicker android:id="@+id/npHour" android:layout_width="80dp" android:layout_height="100dp" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="h" android:textColor="@color/text_secondary" android:layout_marginEnd="16dp"/>
-                <NumberPicker android:id="@+id/npMinute" android:layout_width="80dp" android:layout_height="100dp" />
-                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="m" android:textColor="@color/text_secondary"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- App List Container (Hidden) -->
-        <LinearLayout
-            android:id="@+id/appListContainer"
+        <!-- MIDDLE SCROLLABLE CONTENT -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/setupScrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/btnStartContainer"
-            app:layout_constraintTop_toBottomOf="@id/segmentedControl">
+            android:fillViewport="true"
+            app:layout_constraintTop_toBottomOf="@id/segmentedControl"
+            app:layout_constraintBottom_toTopOf="@id/btnStartContainer">
 
-            <TextView
-                android:id="@+id/tvSelectedApps"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:text="Selected: Phone, Messages"
-                android:textColor="@color/accent_electric_blue"
-                android:textSize="14sp" />
+                android:orientation="vertical"
+                android:paddingBottom="24dp">
 
-            <EditText
-                android:id="@+id/etSearch"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_segment_container"
-                android:hint="Search apps..."
-                android:paddingHorizontal="16dp"
-                android:textColor="@color/text_primary"
-                android:textColorHint="@color/text_secondary" />
+                <!-- Time Picker Section -->
+                <LinearLayout
+                    android:id="@+id/timerSection"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="32dp"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvApps"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:layout_marginTop="12dp" />
-        </LinearLayout>
+                    <!-- Current Selection Display -->
+                    <TextView
+                        android:id="@+id/tvSelectedTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="00:15:00"
+                        android:textColor="@color/text_primary"
+                        android:textSize="72sp"
+                        android:letterSpacing="-0.03"
+                        android:fontFamily="sans-serif-thin" />
 
-        <!-- Bottom Actions -->
+                    <!-- Preset Chips -->
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:scrollbars="none"
+                        android:clipToPadding="false"
+                        android:paddingHorizontal="16dp">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/chip15m"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="72dp"
+                                android:layout_height="44dp"
+                                android:background="@drawable/bg_segment_container"
+                                android:text="15m"
+                                android:textAllCaps="false"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginEnd="8dp" />
+
+                            <Button
+                                android:id="@+id/chip30m"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="72dp"
+                                android:layout_height="44dp"
+                                android:background="@drawable/bg_segment_container"
+                                android:text="30m"
+                                android:textAllCaps="false"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginEnd="8dp" />
+
+                            <Button
+                                android:id="@+id/chip1h"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="72dp"
+                                android:layout_height="44dp"
+                                android:background="@drawable/bg_segment_selected"
+                                android:text="1h"
+                                android:textAllCaps="false"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginEnd="8dp" />
+
+                            <Button
+                                android:id="@+id/chip2h"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="72dp"
+                                android:layout_height="44dp"
+                                android:background="@drawable/bg_segment_container"
+                                android:text="2h"
+                                android:textAllCaps="false"
+                                android:textColor="@color/text_secondary"
+                                android:layout_marginEnd="8dp" />
+
+                            <Button
+                                android:id="@+id/chipCustom"
+                                style="?android:attr/borderlessButtonStyle"
+                                android:layout_width="84dp"
+                                android:layout_height="44dp"
+                                android:background="@drawable/bg_segment_container"
+                                android:text="Custom"
+                                android:textAllCaps="false"
+                                android:textColor="@color/text_secondary" />
+                        </LinearLayout>
+                    </HorizontalScrollView>
+
+                    <!-- Custom Picker (Positioned above button) -->
+                    <LinearLayout
+                        android:id="@+id/customPickerContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"
+                        android:gravity="center"
+                        android:layout_marginTop="24dp"
+                        android:orientation="horizontal">
+                        
+                        <NumberPicker android:id="@+id/npHour" android:layout_width="80dp" android:layout_height="100dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="h" android:textColor="@color/text_secondary" android:layout_marginEnd="16dp"/>
+                        <NumberPicker android:id="@+id/npMinute" android:layout_width="80dp" android:layout_height="100dp" />
+                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="m" android:textColor="@color/text_secondary"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+                <!-- App List Container (Now inside scrollable content) -->
+                <LinearLayout
+                    android:id="@+id/appListContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tvSelectedApps"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="Selected: Phone, Messages"
+                        android:textColor="@color/accent_electric_blue"
+                        android:textSize="14sp" />
+
+                    <EditText
+                        android:id="@+id/etSearch"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:layout_marginTop="12dp"
+                        android:background="@drawable/bg_segment_container"
+                        android:hint="Search apps..."
+                        android:paddingHorizontal="16dp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_secondary" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvApps"
+                        android:layout_width="match_parent"
+                        android:layout_height="400dp"
+                        android:layout_marginTop="12dp" />
+                </LinearLayout>
+
+                <!-- Bottom Spacer to ensure content doesn't get blocked by the fixed button -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Bottom Actions (Pinned to Bottom) -->
         <LinearLayout
             android:id="@+id/btnStartContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:layout_marginBottom="24dp"
-            app:layout_constraintBottom_toTopOf="@id/tvHistoryHeader">
+            app:layout_constraintBottom_toBottomOf="parent">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnStart"
                 android:layout_width="match_parent"
                 android:layout_height="64dp"
                 android:background="@drawable/bg_button_primary"
+                android:elevation="4dp"
+                android:stateListAnimator="@null"
                 android:text="Begin Focus Session"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="18sp"
+                android:letterSpacing="0.01"
                 android:fontFamily="sans-serif-medium" />
 
             <FrameLayout
@@ -263,45 +289,7 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp" />
 
-            <TextView
-                android:id="@+id/btnPreview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:text="Preview Lock →"
-                android:textColor="@color/text_secondary"
-                android:textSize="14sp" />
         </LinearLayout>
-
-        <!-- History Section (Now scrollable for multiple entries) -->
-        <TextView
-            android:id="@+id/tvHistoryHeader"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Recent Sessions"
-            android:textColor="@color/text_secondary"
-            android:textSize="12sp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toTopOf="@id/historyScrollView"
-            app:layout_constraintStart_toStartOf="@id/historyScrollView" />
-
-        <ScrollView
-            android:id="@+id/historyScrollView"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_marginBottom="16dp"
-            android:background="@drawable/bg_segment_container"
-            android:padding="8dp"
-            app:layout_constraintBottom_toBottomOf="parent">
-            
-            <LinearLayout
-                android:id="@+id/historyContainer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" />
-        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -316,8 +304,10 @@
             android:id="@+id/progressTimer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:indicatorSize="280dp"
-            app:trackThickness="4dp"
+            android:max="1000"
+            app:indicatorSize="300dp"
+            app:trackThickness="6dp"
+            app:trackCornerRadius="4dp"
             app:trackColor="@color/surface_elevated"
             app:indicatorColor="@color/accent_electric_blue"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -339,15 +329,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Remaining"
-                android:textColor="@color/text_secondary" />
+                android:textColor="@color/text_secondary"
+                android:letterSpacing="0.08"
+                android:textSize="12sp"
+                android:textAllCaps="true"
+                android:fontFamily="sans-serif-medium" />
 
             <TextView
                 android:id="@+id/tvTimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="00:49:12"
+                android:text="00:15:00"
                 android:textColor="@color/text_primary"
-                android:textSize="48sp"
+                android:textSize="54sp"
+                android:letterSpacing="-0.03"
                 android:fontFamily="sans-serif-light" />
         </LinearLayout>
 

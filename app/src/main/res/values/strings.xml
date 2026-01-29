@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Focentra</string>
-    <string name="accessibility_service_description">This service is required to block distracting apps during your focus sessions.</string>
-    <string name="select_apps">Select 4 Apps (Phone is default)</string>
-    <string name="start_timer">Start Focus Timer</string>
-    <string name="timer_warning">Once started, you cannot stop the timer or exit the allowed apps.</string>
-    <string name="permission_required">Please enable Accessibility Service for MindControl to function.</string>
+    <string name="app_name">Keep My Phone Out</string>
+    <string name="accessibility_service_description">This service helps you stay productive by limiting access to distracting apps during focus sessions you schedule.</string>
+    <string name="select_apps">Choose up to 5 apps to stay available</string>
+    <string name="start_timer">Start Focus Session</string>
+    <string name="timer_warning">During your focus session, access to other apps will be limited to help you stay on task.</string>
+    <string name="permission_required">Please enable the Accessibility Service for Keep My Phone Out to help you stay focused.</string>
     <string name="apps_remaining">Apps to select: %d</string>
 </resources>

@@ -37,9 +37,12 @@ class LockService : AccessibilityService() {
                 // 3. ALLOW Launcher to prevent closing loops (but blocked apps launched from it will still be caught)
                 // 4. Allow selected apps
                 
+                // NEW: We now block the Launcher package too.
+                // This creates a "Seamless Pin" by preventing the user from going to the home screen.
+                // They can only use Keep My Phone Out or their Selected Apps.
+                
                 if (packageName == this.packageName || 
                     packageName == "com.android.systemui" || 
-                    packageName == launcherPackage ||
                     allowedApps.contains(packageName) ||
                     isInputMethod(packageName)
                 ) {

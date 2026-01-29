@@ -48,6 +48,12 @@
             android:launchMode="singleTask">
         </activity>
 
+        <!-- History Activity -->
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false">
+        </activity>
+
         <service
             android:name=".LockService"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"

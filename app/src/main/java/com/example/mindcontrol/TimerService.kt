@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit
 class TimerService : Service() {
 
     private var countdownTimer: CountDownTimer? = null
-    private val CHANNEL_ID = "MindControlChannel"
+    private val CHANNEL_ID = "KeepMyPhoneOutChannel"
     private val NOTIFICATION_ID = 1
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -88,7 +88,7 @@ class TimerService : Service() {
 
     private fun createNotification(contentText: String): Notification {
         return NotificationCompat.Builder(this, CHANNEL_ID)
-            .setContentTitle("MindControl Focus Mode")
+            .setContentTitle("Keep My Phone Out - Focus Session")
             .setContentText(contentText)
             .setSmallIcon(android.R.drawable.ic_lock_idle_alarm)
             .setOngoing(true)

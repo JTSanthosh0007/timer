@@ -320,7 +320,7 @@ class OnboardingActivity : AppCompatActivity() {
         val tvYearsLost = findViewById<TextView>(R.id.tvYearsLost)
         val tvDaysLost = findViewById<TextView>(R.id.tvDaysLost)
         
-        tvYearsLost.text = "-$yearsLost years"
+        tvYearsLost.text = "$yearsLost years"
         tvDaysLost.text = "${numberFormat.format(daysLost)} days"
     }
     
@@ -357,7 +357,7 @@ class OnboardingActivity : AppCompatActivity() {
         
         // Update title based on comparison
         if (actualMinutes > estimatedMinutes) {
-            tvCompareTitle.text = "You are using more than\nyour estimate"
+            tvCompareTitle.text = "Focus insights discovered"
         } else if (actualMinutes < estimatedMinutes) {
             tvCompareTitle.text = "Great! You use less\nthan you thought"
         } else {

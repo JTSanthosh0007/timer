@@ -10,8 +10,8 @@
         android:id="@+id/viewFlipper"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:inAnimation="@android:anim/slide_in_left"
-        android:outAnimation="@android:anim/slide_out_right">
+        android:inAnimation="@anim/slide_in_right"
+        android:outAnimation="@anim/slide_out_left">
 
         <!-- ========== STEP 1: Welcome Screen ========== -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:gravity="center"
-                android:text="Blocks Phone Usage\nCompletely"
+                android:text="Stay Away From\nDistractions"
                 android:textColor="@color/white"
                 android:textSize="28sp"
                 android:textStyle="bold"
@@ -114,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="Even if you're weak, you can block all apps"
+                android:text="Take control of your focus time and stay productive"
                 android:textColor="@color/gray_text"
                 android:textSize="14sp"
                 app:layout_constraintTop_toBottomOf="@id/tvPermTitle" />
@@ -142,7 +142,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_marginStart="12dp"
-                    android:text="🔒 Mind Control"
+                    android:text="🔒 Keep My Phone Out"
                     android:textColor="@color/white"
                     android:textSize="16sp"
                     android:textStyle="bold" />
@@ -870,7 +870,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
                 android:gravity="center"
-                android:text="If you continue like this,\nthe time you will lose is"
+                android:text="Estimated time that could be\nreclaimed for your goals"
                 android:textColor="@color/white"
                 android:textSize="26sp"
                 android:textStyle="bold"
@@ -897,8 +897,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:gravity="center"
-                android:text="-40 years"
-                android:textColor="@color/orange_accent"
+                android:text="40 years"
+                android:textColor="@color/accent_electric_blue"
                 android:textSize="52sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -914,7 +914,7 @@
                 android:layout_marginTop="8dp"
                 android:gravity="center"
                 android:text="14,600 days"
-                android:textColor="@color/orange_accent"
+                android:textColor="@color/accent_electric_blue"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -964,7 +964,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="64dp"
                 android:gravity="center"
-                android:text="MindControl users save\nan average of 32% of their time"
+                android:text="Our users save\nan average of 32% of their time"
                 android:textColor="@color/white"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -1022,7 +1022,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="16dp"
                 android:gravity="center"
-                android:text="Try it for a week, you can do it too"
+                android:text="Start your journey to better focus today"
                 android:textColor="@color/gray_text"
                 android:textSize="14sp"
                 app:layout_constraintBottom_toTopOf="@id/btnGetStarted" />

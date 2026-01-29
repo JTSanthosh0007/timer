@@ -1,38 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Foundation -->
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <!-- Foundation -->
+    <color name="black">#050505</color>
+    <color name="white">#FFFFFF</color>
     
     <!-- Premium Dark Palette -->
-    <color name="bg_dark_start">#0A0A0B</color>
-    <color name="bg_dark_end">#141416</color>
-    <color name="surface_card">#1C1C1E</color>
-    <color name="surface_elevated">#2C2C2E</color>
+    <color name="bg_dark_start">#0D0D10</color>
+    <color name="bg_dark_end">#050505</color>
+    <color name="surface_card">#161619</color>
+    <color name="surface_elevated">#232328</color>
+    <color name="surface_glass">#1AFFFFFF</color> <!-- 10% white for glass effect -->
     
     <!-- Accent Color (Electric Blue) -->
-    <color name="accent_electric_blue">#5E5CE6</color>
-    <color name="accent_glow">#335E5CE6</color> <!-- 20% alpha -->
+    <color name="accent_electric_blue">#646CFF</color>
+    <color name="accent_blue_deep">#4D54FF</color>
+    <color name="accent_glow">#40646CFF</color> <!-- 25% alpha -->
     
     <!-- Text Palette -->
-    <color name="text_primary">#F2F2F7</color>
-    <color name="text_secondary">#8E8E93</color>
-    <color name="text_tertiary">#48484A</color>
+    <color name="text_primary">#F8F8FA</color>
+    <color name="text_secondary">#9BA0A5</color>
+    <color name="text_tertiary">#5A5F64</color>
     
     <!-- Utilities -->
-    <color name="error">#FF453A</color>
-    <color name="success">#32D74B</color>
+    <color name="error">#FF5252</color>
+    <color name="success">#00E676</color>
     
-    <!-- Backward Compatibility Mapping -->
-    <color name="background_color">#0A0A0B</color>
-    <color name="surface_color">#1C1C1E</color>
-    <color name="gray_text">#8E8E93</color>
-    <color name="orange_accent">#5E5CE6</color>
-    <color name="orange_dark">#3D3BB0</color> <!-- Darker accent -->
-    <color name="gray_medium">#2C2C2E</color>
+    <!-- Compatibility -->
+    <color name="background_color">#0D0D10</color>
+    <color name="surface_color">#161619</color>
+    <color name="gray_text">#9BA0A5</color>
+    <color name="orange_accent">#646CFF</color>
+    <color name="orange_dark">#4D54FF</color>
+    <color name="gray_medium">#232328</color>
     <color name="primary_color">#FFFFFF</color>
-    <color name="primary_variant">#F2F2F7</color>
-    <color name="purple_500">#5E5CE6</color>
-    <color name="purple_700">#3D3BB0</color>
-    <color name="teal_200">#5E5CE6</color>
+    <color name="primary_variant">#F8F8FA</color>
+    <color name="purple_500">#646CFF</color>
+    <color name="purple_700">#4D54FF</color>
+    <color name="teal_200">#646CFF</color>
 </resources>

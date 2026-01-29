@@ -60,7 +60,7 @@ class AppAdapter(
             if (!isCurrentlySelected) {
                 // 1. Social Block
                 if (isSocial) {
-                    android.widget.Toast.makeText(holder.itemView.context, "Social media apps are not allowed!", android.widget.Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(holder.itemView.context, "Social media apps are excluded to help you maintain deep focus.", android.widget.Toast.LENGTH_SHORT).show()
                     holder.checkBox.isChecked = false
                     return@OnClickListener
                 }
@@ -69,7 +69,7 @@ class AppAdapter(
                 // We count those that are NOT fixed.
                 val currentCount = getSelectedCount()
                 if (currentCount >= 5) {
-                    android.widget.Toast.makeText(holder.itemView.context, "You can select only up to 5 apps", android.widget.Toast.LENGTH_SHORT).show()
+                    android.widget.Toast.makeText(holder.itemView.context, "You can choose up to 5 apps to stay available during your session.", android.widget.Toast.LENGTH_SHORT).show()
                     holder.checkBox.isChecked = false
                     return@OnClickListener
                 }
@@ -89,16 +89,16 @@ class AppAdapter(
                  // Check Limitations
                  if (isSocial) {
                      holder.checkBox.isChecked = false
-                     android.widget.Toast.makeText(holder.itemView.context, "Social media apps are not allowed!", android.widget.Toast.LENGTH_SHORT).show()
+                     android.widget.Toast.makeText(holder.itemView.context, "Social media apps are excluded to help you maintain focus.", android.widget.Toast.LENGTH_SHORT).show()
                      return@setOnCheckedChangeListener
                  }
                  
                  val currentCount = getSelectedCount()
-                 if (currentCount >= 5) {
-                     holder.checkBox.isChecked = false
-                     android.widget.Toast.makeText(holder.itemView.context, "You can select only up to 5 apps", android.widget.Toast.LENGTH_SHORT).show()
-                     return@setOnCheckedChangeListener
-                 }
+                  if (currentCount >= 5) {
+                      holder.checkBox.isChecked = false
+                      android.widget.Toast.makeText(holder.itemView.context, "You can choose up to 5 apps to stay available.", android.widget.Toast.LENGTH_SHORT).show()
+                      return@setOnCheckedChangeListener
+                  }
             }
             
             app.isSelected = isChecked
