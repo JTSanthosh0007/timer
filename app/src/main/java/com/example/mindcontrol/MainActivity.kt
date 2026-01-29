@@ -190,11 +190,11 @@ class MainActivity : AppCompatActivity() {
 
         // Chip Logic
         val chips = listOf(
+            findViewById<Button>(R.id.chipCustom),
             findViewById<Button>(R.id.chip15m),
             findViewById<Button>(R.id.chip30m),
             findViewById<Button>(R.id.chip1h),
-            findViewById<Button>(R.id.chip2h),
-            findViewById<Button>(R.id.chipCustom)
+            findViewById<Button>(R.id.chip2h)
         )
 
         fun selectChip(selected: Button, h: Int, m: Int, isCustom: Boolean) {
@@ -216,14 +216,14 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        findViewById<Button>(R.id.chipCustom).setOnClickListener { selectChip(it as Button, 0, 0, true) }
         findViewById<Button>(R.id.chip15m).setOnClickListener { selectChip(it as Button, 0, 15, false) }
         findViewById<Button>(R.id.chip30m).setOnClickListener { selectChip(it as Button, 0, 30, false) }
         findViewById<Button>(R.id.chip1h).setOnClickListener { selectChip(it as Button, 1, 0, false) }
         findViewById<Button>(R.id.chip2h).setOnClickListener { selectChip(it as Button, 2, 0, false) }
-        findViewById<Button>(R.id.chipCustom).setOnClickListener { selectChip(it as Button, 0, 0, true) }
 
-        // Default: 15m
-        selectChip(findViewById(R.id.chip15m), 0, 15, false)
+        // Default: Custom
+        selectChip(findViewById(R.id.chipCustom), 0, 0, true)
         
         // Setup Pickers (White Text Hack)
         // ... (Keep existing Logic)
