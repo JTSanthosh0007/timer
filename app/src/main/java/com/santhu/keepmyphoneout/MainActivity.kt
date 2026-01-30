@@ -577,6 +577,11 @@ class MainActivity : AppCompatActivity() {
 
         val allowedAppsList = mutableListOf<AppInfo>()
         val pm = packageManager
+        
+        // Identify Default Phone and SMS
+        val defaultDialer = getSystemService(android.telecom.TelecomManager::class.java).defaultDialerPackage
+        val defaultSms = android.provider.Telephony.Sms.getDefaultSmsPackage(this)
+        
         for (pkg in allowedPackages) {
             try {
                 val appInfo = pm.getApplicationInfo(pkg, 0)
@@ -584,6 +589,28 @@ class MainActivity : AppCompatActivity() {
                 val icon = pm.getApplicationIcon(appInfo)
                 allowedAppsList.add(AppInfo(label, pkg, icon))
             } catch (e: Exception) {}
+        }
+        
+        // SORT: Phone -> SMS -> Alphabetical
+        allowedAppsList.sortWith { a, b ->
+            val isDialerA = a.packageName == defaultDialer
+            val isDialerB = b.packageName == defaultDialer
+            
+            val isSmsA = a.packageName == defaultSms
+            val isSmsB = b.packageName == defaultSms
+            
+            when {
+                // PHONE First
+                isDialerA && !isDialerB -> -1
+                !isDialerA && isDialerB -> 1
+                
+                // MESSAGES Second
+                isSmsA && !isSmsB -> -1
+                !isSmsA && isSmsB -> 1
+                
+                // Then Alphabetical
+                else -> a.label.compareTo(b.label, ignoreCase = true)
+            }
         }
         
         val rvAllowed = findViewById<RecyclerView>(R.id.rvAllowedApps) ?: return
