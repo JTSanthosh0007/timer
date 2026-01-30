@@ -1,4 +1,4 @@
-package com.example.mindcontrol
+package com.santhu.keepmyphoneout
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.content.BroadcastReceiver
@@ -58,6 +58,9 @@ class MainActivity : AppCompatActivity() {
     private val displayApps = mutableListOf<AppInfo>()
     private lateinit var adapter: AppAdapter
     
+    // Banner Ad
+    private lateinit var adViewBanner: com.google.android.gms.ads.AdView
+    
 
     
     // Receiver for timer updates
@@ -81,9 +84,13 @@ class MainActivity : AppCompatActivity() {
                         Utils.addToTotalHistory(this@MainActivity, totalDuration)
                     }
                     
-                    isTimerJustFinished = true
-                    playAlarm()
-                    updateUIState()
+                    // Show interstitial ad when session ends (great revenue opportunity!)
+                    InterstitialAdManager.showAd(this@MainActivity) {
+                        // After ad is dismissed, show the ended screen
+                        isTimerJustFinished = true
+                        playAlarm()
+                        updateUIState()
+                    }
                 }
             }
         }
@@ -231,7 +238,7 @@ class MainActivity : AppCompatActivity() {
         npHour.maxValue = 23
         npMinute.minValue = 0
         npMinute.maxValue = 59
-        npMinute.value = 15 // Default 15 min
+        npMinute.value = 0 // Default 0 min
         
         // Formatter for 00 style
         val formatter = NumberPicker.Formatter { i -> String.format("%02d", i) }
@@ -332,13 +339,16 @@ class MainActivity : AppCompatActivity() {
             // Accessibility Service (LockService) now handles all blocking.
             updateUIState()
         } else {
+            // Reset selected apps when app opens and is NOT in a focus session
+            // This ensures each session starts fresh with default selections
+            Utils.clearAllowedApps(this)
             loadApps()
         }
 
-        // Initialize AdMob
-        com.google.android.gms.ads.MobileAds.initialize(this) {}
-        
-        // Load Native Ad
+        // Preload Interstitial Ad for session end
+        InterstitialAdManager.loadAd(this)
+
+        // Load Native Ad (AdMob initialization is handled in KeepMyPhoneOutApp)
         val adLoader = com.google.android.gms.ads.AdLoader.Builder(this, "ca-app-pub-4060024795112786/6134252090")
             .forNativeAd { nativeAd ->
                 val adFrame = findViewById<android.widget.FrameLayout>(R.id.ad_frame) ?: return@forNativeAd
@@ -379,6 +389,10 @@ class MainActivity : AppCompatActivity() {
             .build()
             
         adLoader.loadAd(com.google.android.gms.ads.AdRequest.Builder().build())
+        
+        // Load Banner Ad
+        adViewBanner = findViewById(R.id.adViewBanner)
+        adViewBanner.loadAd(com.google.android.gms.ads.AdRequest.Builder().build())
     }
 
     override fun onBackPressed() {
@@ -683,8 +697,15 @@ class MainActivity : AppCompatActivity() {
             val isSms = packageName == defaultSms
             val isDefaultApp = isDialer || isSms
             
-            // Restore selection from Utils if it exists, otherwise use defaults
-            val isSelected = isDefaultApp || allowedApps.contains(packageName)
+            // Determine if app should be selected (allowed during focus)
+            // NEW LOGIC: 
+            // 1. Default apps (Phone, SMS) are always selected/allowed - user can't change
+            // 2. ALL OTHER APPS are UNSELECTED by default (will be blocked)
+            // 3. User must manually SELECT which apps to ALLOW
+            val isSelected = when {
+                isDefaultApp -> true  // Phone & SMS always allowed (fixed)
+                else -> false  // All other apps are UNSELECTED by default
+            }
             
             allApps.add(AppInfo(label, packageName, icon, isSelected = isSelected, isFixed = isDefaultApp))
         }

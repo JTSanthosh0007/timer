@@ -1,4 +1,4 @@
-package com.example.mindcontrol
+package com.santhu.keepmyphoneout
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater

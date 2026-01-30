@@ -1,4 +1,4 @@
-package com.example.mindcontrol
+package com.santhu.keepmyphoneout
 
 import android.accessibilityservice.AccessibilityServiceInfo
 import android.app.AppOpsManager

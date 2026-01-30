@@ -1,4 +1,4 @@
-package com.example.mindcontrol
+package com.santhu.keepmyphoneout
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -21,8 +21,8 @@ object Utils {
     )
     
     // Broadcast Actions
-    const val ACTION_TIMER_TICK = "com.example.keepmyphoneout.TIMER_TICK"
-    const val ACTION_TIMER_FINISHED = "com.example.keepmyphoneout.TIMER_FINISHED"
+    const val ACTION_TIMER_TICK = "com.santhu.keepmyphoneout.TIMER_TICK"
+    const val ACTION_TIMER_FINISHED = "com.santhu.keepmyphoneout.TIMER_FINISHED"
     const val EXTRA_TIME_REMAINING = "time_remaining"
 
     private fun getPrefs(context: Context): SharedPreferences {
@@ -39,6 +39,10 @@ object Utils {
         val json = getPrefs(context).getString(KEY_ALLOWED_APPS, null) ?: return emptySet()
         val type = object : TypeToken<Set<String>>() {}.type
         return Gson().fromJson(json, type)
+    }
+
+    fun clearAllowedApps(context: Context) {
+        getPrefs(context).edit().remove(KEY_ALLOWED_APPS).apply()
     }
 
     private const val KEY_TIMER_TOTAL_DURATION = "timer_total_duration"

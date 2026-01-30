@@ -1,0 +1,111 @@
+﻿
+> Configure project :app
+./gradlew : e: file:///C:/Users/jtsan/Desktop/mind
+control/app/build.gradle.kts:24:47: Unresolved 
+reference: util
+At line:1 char:5
++ & { ./gradlew assembleRelease 2>&1 | Out-File 
+-FilePath build_release ...
++     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (e: f 
+   ile:///C:/U...reference: util:String) [], Rem  
+  oteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+w: file:///C:/Users/jtsan/Desktop/mindcontrol/app/build.gradle.kts:27:69: No cast needed
+w: file:///C:/Users/jtsan/Desktop/mindcontrol/app/build.gradle.kts:28:59: No cast needed
+w: file:///C:/Users/jtsan/Desktop/mindcontrol/app/build.gradle.kts:29:65: No cast needed
+
+[Incubating] Problems report is available at: file:///C:/Users/jtsan/Desktop/mindcontrol/build/reports/problems/problems-report.html
+
+FAILURE: Build completed with 2 failures.
+
+1: Task failed with an exception.
+-----------
+* Where:
+Build file 'C:\Users\jtsan\Desktop\mindcontrol\app
+\build.gradle.kts' line: 24
+
+* What went wrong:
+Script compilation errors:
+
+  Line 24:                 val keystoreProperties 
+= java.util.Properties()
+                                                  
+       ^ Unresolved reference: util
+
+  Line 27:                 storePassword = 
+keystoreProperties["storePassword"] as String
+                                                  
+                             ^ No cast needed
+
+  Line 28:                 keyAlias = 
+keystoreProperties["keyAlias"] as String
+                                                  
+                   ^ No cast needed
+
+  Line 29:                 keyPassword = 
+keystoreProperties["keyPassword"] as String
+                                                  
+                         ^ No cast needed
+
+4 errors
+
+* Try:
+> Run with --stacktrace option to get the stack 
+trace.
+> Run with --info or --debug option to get more 
+log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==================================================
+============================
+
+2: Task failed with an exception.
+-----------
+* Where:
+Build file 'C:\Users\jtsan\Desktop\mindcontrol\app
+\build.gradle.kts' line: 24
+
+* What went wrong:
+Script compilation errors:
+
+  Line 24:                 val keystoreProperties 
+= java.util.Properties()
+                                                  
+       ^ Unresolved reference: util
+
+  Line 27:                 storePassword = 
+keystoreProperties["storePassword"] as String
+                                                  
+                             ^ No cast needed
+
+  Line 28:                 keyAlias = 
+keystoreProperties["keyAlias"] as String
+                                                  
+                   ^ No cast needed
+
+  Line 29:                 keyPassword = 
+keystoreProperties["keyPassword"] as String
+                                                  
+                         ^ No cast needed
+
+4 errors
+
+* Try:
+> Run with --stacktrace option to get the stack 
+trace.
+> Run with --info or --debug option to get more 
+log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+==================================================
+============================
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.13/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 3s

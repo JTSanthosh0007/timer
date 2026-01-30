@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="200dp"
+    android:height="200dp"
+    android:viewportWidth="200"
+    android:viewportHeight="200">
+    
+    <!-- Background circle -->
+    <path
+        android:pathData="M100,10C149.7,10 190,50.3 190,100C190,149.7 149.7,190 100,190C50.3,190 10,149.7 10,100C10,50.3 50.3,10 100,10Z"
+        android:fillColor="#1a1a2e"/>
+    
+    <!-- Outer circle (No symbol) -->
+    <path
+        android:pathData="M100,30C138.7,30 170,61.3 170,100C170,138.7 138.7,170 100,170C61.3,170 30,138.7 30,100C30,61.3 61.3,30 100,30ZM100,42C68,42 42,68 42,100C42,132 68,158 100,158C132,158 158,132 158,100C158,68 132,42 100,42Z"
+        android:fillColor="#4ECDC4"/>
+    
+    <!-- Phone silhouette -->
+    <path
+        android:pathData="M80,55L120,55A8,8 0,0 1,128 63L128,137A8,8 0,0 1,120 145L80,145A8,8 0,0 1,72 137L72,63A8,8 0,0 1,80 55ZM80,70L80,130L120,130L120,70L80,70Z"
+        android:fillColor="#4ECDC4"/>
+    
+    <!-- Diagonal slash -->
+    <path
+        android:pathData="M45,155L155,45"
+        android:strokeWidth="10"
+        android:strokeColor="#4ECDC4"/>
+</vector>

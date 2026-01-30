@@ -289,6 +289,15 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="8dp" />
 
+            <!-- Banner Ad -->
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adViewBanner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:adSize="BANNER"
+                app:adUnitId="ca-app-pub-4060024795112786/4801037527" />
+
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

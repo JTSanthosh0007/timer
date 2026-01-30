@@ -12,5 +12,5 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "MindControl"
+rootProject.name = "KeepMyPhoneOut"
 include(":app")
