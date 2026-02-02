@@ -1,0 +1,8 @@
+{
+  "name": "mindcontrol-website",
+  "version": "1.0.0",
+  "description": "Website for MindControl App",
+  "scripts": {
+    "start": "npx serve ."
+  }
+}
